@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.TaskMapper">
+    <select id="selectDayStat" resultType="java.util.Map">
+        SELECT 'total' AS `key`, '全部任务' AS label, COUNT(*) AS value FROM daily_task WHERE task_date = #{todayDate}
+        UNION ALL
+        SELECT 'unfinish' AS `key`, '待完成' AS label, COUNT(*) AS value FROM daily_task WHERE task_date = #{todayDate} AND is_finish = 0
+        UNION ALL
+        SELECT 'finish' AS `key`, '已完成' AS label, COUNT(*) AS value FROM daily_task WHERE task_date = #{todayDate} AND is_finish = 1
+        UNION ALL
+        SELECT 'rate' AS `key`, '完成率' AS label, ROUND(IF(COUNT(*) = 0, 0, SUM(is_finish) / COUNT(*) * 100), 0) AS value FROM daily_task WHERE task_date = #{todayDate}
+    </select>
+</mapper>

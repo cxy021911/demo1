@@ -8,12 +8,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
-@TableName("daily_task")
-public class Task {
+@TableName("plan_task")
+public class Plan {
     @TableId(type = IdType.AUTO)
     private Long id;
     private String taskTitle;
-    private Integer isFinish;
     private LocalDate taskDate;
     private LocalDateTime createTime;
+
 }

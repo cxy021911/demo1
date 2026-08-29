@@ -1,14 +1,15 @@
 package com.example.demo.serviceimpl;
+
 import com.example.demo.Entity.Task;
 import com.example.demo.service.TaskService;
 import com.example.demo.mapper.TaskMapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.example.demo.service.TaskService;
 import com.example.demo.vo.TaskVO;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.Resource;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         return taskList.stream().map(entity -> {
             TaskVO vo = new TaskVO();
             vo.setId(entity.getId());
-            vo.setTitle(entity.getTaskTitle());
+            vo.setTaskTitle(entity.getTaskTitle());
             vo.setFinish(entity.getIsFinish() == 1);
             return vo;
         }).collect(Collectors.toList());
@@ -42,9 +43,10 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
     @Override
     public void addTask(TaskVO vo) {
         Task task = new Task();
-        task.setTaskTitle(vo.getTitle());
+        task.setTaskTitle(vo.getTaskTitle());
         task.setIsFinish(0);
-        task.setTaskDate(LocalDate.now());
+        task.setTaskDate(vo.getTaskDate());
+        task.setCreateTime(LocalDateTime.now());
         save(task);
     }
 
