@@ -8,5 +8,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PlanServiceImpl extends ServiceImpl<PlanMapper, Plan> implements PlanService {
+    /**
+     * Redis分布式锁新增任务，高并发防重复插入
+     * @param plan 任务实体
+     * @return 是否保存成功
+     */
+
 
 }

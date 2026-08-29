@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.common.Result;
 import com.example.demo.service.TaskService;
 import com.example.demo.vo.TaskVO;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import jakarta.annotation.Resource;
 import java.time.LocalDate;
@@ -33,8 +34,21 @@ public class WorkBenchController {
     // 新增任务
     @PostMapping("/task/add")
     public Result<String> addTask(@RequestBody TaskVO vo) {
-        taskService.addTask(vo);
-        return Result.success("添加成功");
+        // 参数校验
+        if(ObjectUtils.isEmpty(vo) || ObjectUtils.isEmpty(vo.getTaskTitle())){
+            return Result.fail("任务标题不能为空");
+        }
+        //不传日期默认今天
+        if(vo.getTaskDate() == null){
+            vo.setTaskDate(LocalDate.now());
+        }
+        try {
+            taskService.addTask(vo);
+            return Result.success("添加成功");
+        }catch (RuntimeException e){
+            // 获取锁失败 / 重复提交异常返回前端
+            return Result.fail(e.getMessage());
+        }
     }
 
     // 修改完成状态
